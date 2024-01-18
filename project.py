@@ -149,7 +149,12 @@ if time_release == "Year or Decade" or "Year range":
             end_year = driver.find_element(By.ID, f"date_year_chooser_year_{end_year}")
             end_year.click()
 
+    time.sleep(2)
+    close_button = driver.find_element(By.XPATH, "//*[contains(text(), 'Close')]")
+    close_button.click()
+
 else:
     pass
 
 time.sleep(10)
+
