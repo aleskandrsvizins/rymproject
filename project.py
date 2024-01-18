@@ -22,3 +22,17 @@ consent_button.click()
 wait.until(EC.presence_of_element_located((By.CLASS_NAME, "page_charts_settings_summary")))
            
 # select the rating
+# make it user-defined
+rating = "Popular"
+
+rating_div = driver.find_element(By.XPATH, "//div[@class = 'page_chart_query_item page_chart_query_item_type_selector']")
+rating_div.click()
+
+time.sleep(5)
+
+option = driver.find_element(By.XPATH, f"//div[@data-description='{rating}']")
+option.click()
+
+time.sleep(5)
+
+
