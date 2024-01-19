@@ -49,7 +49,7 @@ Rate by:
 [3] Esoteric (Relatively unknown but with high average ratings)
 [4] Diverse (Artists are limited to one entry per chart)
 [5] Bottom (As determined by users' ratings)
-Choose an option: 
+Choose an option: 2                                                                               # Chosen rating option: Popular rating
 ```
 
 ```bash
@@ -66,6 +66,16 @@ Selected types: ['album', 'djmix']
 Select a release type by entering the corresponding number. Press Enter when done.
 ```
 
+```bash
+
+[1] All-time (charts from all time)
+[2] Specific year or decade (for example '1984', '2010s')
+[3] Year-range (for example '1984-2016')
+
+Select a time option by entering the corresponding number: 1                                        # Selected time option: All-time
+
+```
+
 - Ievadiet izlaidumu skaitu, ko vēlaties scrapot.
 
 ```bash
@@ -75,9 +85,7 @@ Enter the number of releases to be collected: 12
 - Pagaidiet, līdz skripts tiks pabeigts. Tas pāriet uz RateYourMusic diagrammu lapu, izgūs nepieciešamo informāciju un saglabās to CSV failā.
 
 ```python
-# save the data
-
-df.to_csv(f"list ranked by {rating_url} rating {date_url}.csv", index=False)
+df.to_csv(f"list ranked by {rating_url} rating {date_url}.csv", index=False)                         # save the data
 ```
 
 - Kad skripts ir pabeigts, tas izdrukās `👈 here is your clean file. enjoy.` un atmest.
