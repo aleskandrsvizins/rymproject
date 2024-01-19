@@ -97,7 +97,7 @@ Select a time option by entering the corresponding number: 1                    
 Enter the number of releases to be collected: 12
 ```
 
-- Pagaidiet, līdz skripts tiks pabeigts. Tas pāriet uz RateYourMusic diagrammu lapu, izgūs nepieciešamo informāciju un saglabās to CSV failā.
+- Pagaidiet, līdz skripts tiks pabeigts. Tas pāriet uz RateYourMusic charts lapu, izgūs nepieciešamo informāciju un saglabās to CSV failā.
 
 ```python
 df.to_csv(f"list ranked by {rating_url} rating {date_url}.csv", index=False)                         # save the data
