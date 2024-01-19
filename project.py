@@ -4,7 +4,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 import pandas as pd
-from fpdf import FPDF
+import math
 
 import time
 import datetime
@@ -207,92 +207,89 @@ time.sleep(5)
 # soup did not work
 
 # number of pages 
-page_num = 1
 
 releases_collected = 0
 
-number_releases = 20
+number_releases = 80
+
+num_pages = math.ceil(number_releases / 40.0)
 
 number_order = 0
 
 data = []
     
 # fetch and parse data
+for page_num in range(1, num_pages + 1):
 
-if releases_collected <= number_releases:
-    # construct the url
-    if page_num == 1:
-          url = f"https://rateyourmusic.com/charts/{rating_url}/{types}/{date_url}/"
-    else:
-         url = f"https://rateyourmusic.com/charts/{rating_url}/{types}/{date_url}/{page_num}/"
-
-    driver.get(url)
-
-    # extract necessary information
-
-    releases = driver.find_elements(By.CLASS_NAME, 'page_charts_section_charts_item')
-    
-
-
-    for release in releases[:number_releases]:
-
-        releases_collected += 1
-
-        number_order += 1
-
-        name = release.find_element(By.CSS_SELECTOR, 'a.page_charts_section_charts_item_link.release').text
-
-        stats_average = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_details_average_num').text
-
-        stats_ratings = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_details_ratings').text
-
-        artist = release.find_element(By.CSS_SELECTOR, 'a.artist').text
-
-        date = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_date').text.replace("Album", "")
-
-
-        primary_genres = []
-
-        genre_elements = release.find_elements(By.CSS_SELECTOR, '.page_charts_section_charts_item_genres_primary .genre')
-
-        for genre_element in genre_elements:
-            primary_genres.append(genre_element.text)
+    if releases_collected <= number_releases:
         
-        primary_genres = ' / '.join(primary_genres)
+        # construct the url
+        url = f"https://rateyourmusic.com/charts/{rating_url}/{types}/{date_url}/{page_num if page_num > 1 else ''}/"
+
+        driver.get(url)
+
+        # extract necessary information
+
+        releases = driver.find_elements(By.CLASS_NAME, 'page_charts_section_charts_item')
+
+        releases_to_process = min(number_releases, 40)
+        
+        for release in releases[:releases_to_process]:
+
+            releases_collected += 1
+
+            number_order += 1
+
+            name = release.find_element(By.CSS_SELECTOR, 'a.page_charts_section_charts_item_link.release').text
+
+            stats_average = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_details_average_num').text
+
+            stats_ratings = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_details_ratings').text
+
+            artist = release.find_element(By.CSS_SELECTOR, 'a.artist').text
+
+            date = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_date').text.replace("Album", "")
 
 
-        secondary_genres = []
+            primary_genres = []
 
-        secondary_genre_elements = release.find_elements(By.CSS_SELECTOR, '.page_charts_section_charts_item_genres_secondary .comma_separated')
+            genre_elements = release.find_elements(By.CSS_SELECTOR, '.page_charts_section_charts_item_genres_primary .genre')
 
-        for secondary_genre_element in secondary_genre_elements:
-            secondary_genres.append(secondary_genre_element.text)
-
-        secondary_genres = ' / '.join(secondary_genres)
-
-        descriptors = ' / '.join(release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_genre_descriptors').text.split())
+            for genre_element in genre_elements:
+                primary_genres.append(genre_element.text)
+            
+            primary_genres = ' / '.join(primary_genres)
 
 
-        data.append({
-            'Number': number_order,
-            'Name': name,
-            'Average': stats_average,
-            'Ratings': stats_ratings,
-            'Artist': artist,
-            'Date': date,
-            'Primary Genres': primary_genres,
-            'Secondary Genres': secondary_genres,
-            'Descriptors': descriptors
-        })
+            secondary_genres = []
 
-    # if releases_collected <= 40:
-    #     # increment the page number
-    #     page_num += 1
-    # elif releases_collected > 40:
-    #     page_num += 2 * (releases_collected // 40)
+            secondary_genre_elements = release.find_elements(By.CSS_SELECTOR, '.page_charts_section_charts_item_genres_secondary .comma_separated')
 
-    # wait for 10 to 15 sec, before making the next request
-    time.sleep(random.uniform(10, 15))
+            for secondary_genre_element in secondary_genre_elements:
+                secondary_genres.append(secondary_genre_element.text)
+
+            secondary_genres = ' / '.join(secondary_genres)
+
+            descriptors = ' / '.join(release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_genre_descriptors').text.split())
+
+
+            data.append({
+                'Number': number_order,
+                'Name': name,
+                'Average': stats_average,
+                'Ratings': stats_ratings,
+                'Artist': artist,
+                'Date': date,
+                'Primary Genres': primary_genres,
+                'Secondary Genres': secondary_genres,
+                'Descriptors': descriptors
+            })
+
+        # update the number of releases left
+        number_releases -= releases_to_process
+
+        # wait for 10 to 15 sec, before making the next request
+        time.sleep(random.uniform(10, 15))
 
 driver.quit()
 
