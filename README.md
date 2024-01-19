@@ -30,7 +30,20 @@ Programma tika izstrādā izmantojot Visual Studio Code.
 ```bash
 pip install selenium pandas math time datetime random re
 ```
-`
+
+- **Selenium:** Izmanto tiešsaistes tīmekļa lietojumprogrammu (web application) testēšanai un automatizācijai. Ārkārtīgi noderīga, ja ir nepieciešams veikt darbības tiešsaistes vietnēs vai iegūt datus no tīmekļa lapām.
+
+- **Pandas:** Lieliska bibliotēka datu analīzei un manipulācijām. To izmanto, lai ērti strādātu ar datu tabulām, filtrētu datus, veiktu aprēķinus un citus datu apstrādes uzdevumus.
+
+- **Math:** Python iebūvētā matemātikas bibliotēka, kas nodrošina dažādas matemātiskas funkcijas un konstantes.
+
+- **Time un Datetime:** Šīs bibliotēkas tiek izmantotas laika operācijām. `Time` izmanto, lai mērītu izpildes laiku, bet `Datetime` piedāvā plašas iespējas darbam ar datumu un laiku.
+
+- **Random:** Ārkārtīgi noderīga, ja nepieciešams iegūt gadījuma skaitļus vai veikt citas gadījuma operācijas.
+
+- **Re:** Regular Expressions bibliotēka, kas ļauj veikt teksta meklēšanu un manipulāciju, pamatojoties uz noteiktiem rakstzīmju modeļiem.
+
+> Katru no šīm bibliotēkām izmanto, lai efektīvi risinātu konkrētus uzdevumus un uzlabotu izstrādes procesu atkarībā no projekta prasībām.
         
 3. **Palaidiet Skriptu:**
     
