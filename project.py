@@ -3,13 +3,11 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-import requests
-from bs4 import BeautifulSoup
 import pandas as pd
 from fpdf import FPDF
 
 import time
+import datetime
 import random
 
 # set up the driver
@@ -48,7 +46,7 @@ option.click()
 time.sleep(2)
 
 # for url
-rating.lower()
+rating_url = rating.lower()
 
 # select the type
 
@@ -102,6 +100,8 @@ time.sleep(2)
 # select year
 
 time_release = "Year range"
+
+current_year = datetime.datetime.now().year
 
 time_release_div = driver.find_element(By.XPATH, "//div[@onclick='RYMchart.openDateSelect();']")
 time_release_div.click()
@@ -172,7 +172,18 @@ elif time_release == "Year range":
             end_year = driver.find_element(By.ID, f"date_year_chooser_year_{end_year}")
             end_year.click()
 
+
         date_url = f"{start_url}-{end_url}"
+
+        if date_url == "1900-1999":
+            date_url = "20th_century"
+
+        elif date_url == f"{current_year}-2000":
+             date_url = "21st_century"
+
+        else:
+            date_url = f"{start_url}-{end_url}"
+             
 
         # Click on the empty space
         div_close = driver.find_element(By.ID, "overlay_invisible")
@@ -193,97 +204,95 @@ update_button.click()
 time.sleep(10)
 
 # soup is tasty, but not as tasty as soup.find_all()
-
-def extract_data(soup):
-     
-     data = []
-
-     releases = soup.find_all("div", class_="page_charts_section_charts_item")
-
-     for release in releases:
-          
-          picture = release.find('picture', class_='page_charts_section_charts_itrm_image').find('source')['srcset']
-
-          number = release.find('div', class_='page_charts_section_charts_item_number').text
-
-          name = release.find('a', class_='page_charts_section_charts_item_link release').text
-
-          stats = release.find('div', class_='page_charts_section_charts_item_stats').text
-
-          artist = release.find('a', class_='artist').text
-
-          date = release.find('div', class_='page_charts_section_charts_item_date').text
-
-          primary_genres = release.find('div', class_='page_charts_section_charts_item_genres_primary').text
-
-          secondary_genres = release.find('div', class_='page_charts_section_charts_item_genres_secondary').text
-
-          descriptors = release.find('div', class_='page_charts_section_charts_item_genres_descriptors').text
-
-          data.apeend({
-               'Number': number,
-               'Picture': picture,
-                'Name': name,
-                'Stats': stats,
-                'Artist': artist,
-                'Date': date,
-                'Primary Genres': primary_genres,
-                'Secondary Genres': secondary_genres,
-                'Descriptors': descriptors
-          })
-     return data_url
+# soup did not work
 
 # number of releases
-num_releases = 3
+num_releases = 2
 
 releases_collected = 0
+number = 0
 page_num = 1
 data = []
+    
+# fetch and parse data
 
-# fetch and parse data in loop
-
-while releases_collected < num_releases:  
-
-     # also construct that cray cray url
-
+while releases_collected < num_releases:
+    # construct the url
     if page_num == 1:
-          url = f"https://rateyourmusic.com/charts/{rating}/{types}/{date_url}/"
-
+          url = f"https://rateyourmusic.com/charts/{rating_url}/{types}/{date_url}/"
     else:
-          url = f"https://rateyourmusic.com/charts/{rating}/{types}/{date_url}/{page_num}/"
+         url = f"https://rateyourmusic.com/charts/{rating_url}/{types}/{date_url}/{page_num}/"
 
-    # Fetch data from the website
-    response = requests.get(url)
+    driver.get(url)
 
-    # Parse HTML
-    soup = BeautifulSoup(response.text, 'html.parser')
+    # extract necessary information
 
-    # Extract necessary information
-    page_data = extract_data(soup)
-    data.extend(page_data)
+    releases = driver.find_elements(By.CLASS_NAME, 'page_charts_section_charts_item')
 
-    # Update the number of releases collected
-    releases_collected += len(page_data)
+    for release in releases:
 
-    # Increment the page number
+        number += 1
+
+        name = release.find_element(By.CSS_SELECTOR, 'a.page_charts_section_charts_item_link.release').text
+
+        stats_average = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_details_average_num').text
+
+        stats_ratings = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_details_ratings').text
+
+        artist = release.find_element(By.CSS_SELECTOR, 'a.artist').text
+
+        date = release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_date').text.replace("Album", "")
+
+
+        primary_genres = []
+
+        genre_elements = release.find_elements(By.CSS_SELECTOR, '.page_charts_section_charts_item_genres_primary .genre')
+
+        for genre_element in genre_elements:
+            primary_genres.append(genre_element.text)
+        
+        primary_genres = ' / '.join(primary_genres)
+
+
+        secondary_genres = []
+
+        secondary_genre_elements = release.find_elements(By.CSS_SELECTOR, '.page_charts_section_charts_item_genres_secondary .comma_separated')
+
+        for secondary_genre_element in secondary_genre_elements:
+            secondary_genres.append(secondary_genre_element.text)
+
+        secondary_genres = ' / '.join(secondary_genres)
+
+        descriptors = ' / '.join(release.find_element(By.CLASS_NAME, 'page_charts_section_charts_item_genre_descriptors').text.split())
+
+
+        data.append({
+            'Number': number,
+            'Name': name,
+            'Average': stats_average,
+            'Ratings': stats_ratings,
+            'Artist': artist,
+            'Date': date,
+            'Primary Genres': primary_genres,
+            'Secondary Genres': secondary_genres,
+            'Descriptors': descriptors
+        })
+
+        # update the number of releases collected
+        releases_collected += len(releases)
+
+    # increment the page number
     page_num += 1
 
-    # Wait for 10 to 15 seconds before making the next request
+    # wait for 10 to 15 sec, before making the next request
     time.sleep(random.uniform(10, 15))
 
-# Organize the data
+driver.quit()
+
 df = pd.DataFrame(data)
 
-# # Ask user for output format
-# output_format = input("Enter output format (txt, pdf): ")
-
-# # Output the data
-# if output_format == "txt":
-#     df.to_csv("output.txt", sep='\t', index=False)
-# elif output_format == "pdf":
-#     # PDF generation code goes here
-#     pass
-    
+# save the data
+df.to_csv(f"list ranked by {rating_url} rating.csv", index=False)
 
 
 
