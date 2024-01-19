@@ -80,7 +80,7 @@ Enter the number of releases to be collected: 12
 df.to_csv(f"list ranked by {rating_url} rating {date_url}.csv", index=False)
 ```
 
-- Kad skripts ir pabeigts, tas izdrukās `👈 here is your clean file. enjoy.` un atmest.
+- Kad skripts ir pabeigts, tas izdrukās `🫲 here is your clean file. enjoy.` un atmest.
 
 ### Apkopoti Dati 
 

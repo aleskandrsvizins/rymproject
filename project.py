@@ -97,7 +97,8 @@ while True:
 # ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
 
 # select date
-
+start_year = ""
+end_year = ""
 start_decade = ""    
 end_decade = ""
 
@@ -165,27 +166,26 @@ else:
 
         # Valid decade range
         start_decade, end_year = time_input.split("-")
-        start_year = start_decade[:-1] + "0s"
+        start_year = start_decade[:-1] + "s"
         print("Selected time option: Decade-range")
         print("")
-        print("Start Decade:", start_decade)
+        print("Start Decade:", start_year)
         print("End Year:", end_year)
 
     elif re.match(r"^\d{4}-\d{4}s$", time_input):
         
         # Valid decade range
         start_year, end_decade = time_input.split("-")
-        start_year = end_decade[:-1] + "0s"
         print("Selected time option: Decade-range")
         print("")
         print("Start Year:", start_year)
-        print("End Decade:", end_decade)
+        print("End Decade:", end_decade[:-1] + "s")
 
     elif re.match(r"^\d{4}s-\d{4}s$", time_input):
         # Valid decade range
         start_decade, end_decade = time_input.split("-")
-        start_year = start_decade[:-1] + "0s"
-        end_year = end_decade[:-1] + "0s"
+        start_year = start_decade[:-1] + "s"
+        end_year = end_decade[:-1] + "s"
         print("Selected time option: Decade-range")
         print("")
         print("Start Decade:", start_decade)
@@ -433,7 +433,6 @@ time.sleep(5)
 # RELEASES
 
 
-
 releases_collected = 0
 
 number_releases = int(number_releases)
@@ -524,7 +523,7 @@ df = pd.DataFrame(data)
 # save the data
 df.to_csv(f"list ranked by {rating_url} rating {date_url}.csv", index=False)
 
-print("👈 here is your clean file. enjoy.")
+print("🫲 here is your clean file. enjoy.")
 
 
 
