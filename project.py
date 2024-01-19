@@ -59,7 +59,7 @@ release_type_div.click()
 button = driver.find_element(By.CLASS_NAME, "release_type_btn.selected")
 button.click()
 
-time.sleep(3)
+time.sleep(2)
 
 def select_release_type(release_type):
     release_type_div = driver.find_element(By.XPATH, f"//div[@onclick=\"RYMchart.toggleReleaseType('{release_type}');\"]")
@@ -201,22 +201,25 @@ time.sleep(2)
 update_button = driver.find_element(By.XPATH, "//a[@onclick='RYMchart.onClickCreateChart();']")
 update_button.click()
 
-time.sleep(10)
+time.sleep(5)
 
 # soup is tasty, but not as tasty as soup.find_all()
 # soup did not work
 
-# number of releases
-num_releases = 2
+# number of pages 
+page_num = 1
 
 releases_collected = 0
-number = 0
-page_num = 1
+
+number_releases = 20
+
+number_order = 0
+
 data = []
     
 # fetch and parse data
 
-while releases_collected < num_releases:
+if releases_collected <= number_releases:
     # construct the url
     if page_num == 1:
           url = f"https://rateyourmusic.com/charts/{rating_url}/{types}/{date_url}/"
@@ -228,10 +231,14 @@ while releases_collected < num_releases:
     # extract necessary information
 
     releases = driver.find_elements(By.CLASS_NAME, 'page_charts_section_charts_item')
+    
 
-    for release in releases:
 
-        number += 1
+    for release in releases[:number_releases]:
+
+        releases_collected += 1
+
+        number_order += 1
 
         name = release.find_element(By.CSS_SELECTOR, 'a.page_charts_section_charts_item_link.release').text
 
@@ -267,7 +274,7 @@ while releases_collected < num_releases:
 
 
         data.append({
-            'Number': number,
+            'Number': number_order,
             'Name': name,
             'Average': stats_average,
             'Ratings': stats_ratings,
@@ -278,11 +285,11 @@ while releases_collected < num_releases:
             'Descriptors': descriptors
         })
 
-        # update the number of releases collected
-        releases_collected += len(releases)
-
-    # increment the page number
-    page_num += 1
+    # if releases_collected <= 40:
+    #     # increment the page number
+    #     page_num += 1
+    # elif releases_collected > 40:
+    #     page_num += 2 * (releases_collected // 40)
 
     # wait for 10 to 15 sec, before making the next request
     time.sleep(random.uniform(10, 15))
