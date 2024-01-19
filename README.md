@@ -53,7 +53,7 @@ pip install selenium pandas math time datetime random re
 python project.py
 ```
 
-### User Input
+### Lietotāja ievade
     
 - Izpildiet norādījumus, lai atlasītu izlaiduma veidu un vērtējuma opciju.
 
