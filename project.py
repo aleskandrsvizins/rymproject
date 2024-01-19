@@ -9,6 +9,203 @@ import math
 import time
 import datetime
 import random
+import re
+
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
+# select the rating
+# make it user-defined
+
+print("")
+
+rating_option = input("Rate by:\n[1] Top \033[90m(As determined by users' ratings)\033[0m\n[2] Popular \033[90m(Most number of ratings)\033[0m\n[3] Esoteric \033[90m(Relatively unknown but with high average ratings)\033[0m\n[4] Diverse \033[90m(Artists are limited to one entry per chart)\033[0m\n[5] Bottom \033[90m(As determined by users' ratings)\033[0m\nChoose an option: ")
+
+if rating_option == "1":
+    rating = "Top"
+elif rating_option == "2":
+    rating = "Popular"
+elif rating_option == "3":
+    rating = "Esoteric"
+elif rating_option == "4":
+    rating = "Diverse"
+elif rating_option == "5":
+    rating = "Bottom"
+else:
+    print("Invalid option. Defaulting to Top.")
+    rating = "Top"
+
+print("")
+
+print("Chosen rating option:", rating, "rating")
+
+print("")
+
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
+# select type
+    
+release_types = {
+    
+    '1': {'name': 'Album', 'selected': False},
+    '2': {'name': 'EP', 'selected': False},
+    '3': {'name': 'Mixtape', 'selected': False},
+    '4': {'name': 'DJ Mix', 'selected': False},
+    '5': {'name': 'Single', 'selected': False},
+    '6': {'name': 'Compilation', 'selected': False},
+    '7': {'name': 'All', 'selected': False}
+}
+
+user_input = ""  # Add a default value for user_input
+
+def print_release_types():
+    for key, value in release_types.items():
+        print(f"[{'x' if value['selected'] else ' '}] [{key}]: {value['name']}")
+
+# User input for release types
+        
+while True:
+
+    print_release_types()
+
+    print("")
+
+    print("Select a release type by entering the corresponding number. Press Enter when done.")
+
+    print("")
+
+    user_input = input().strip()
+
+    if user_input == "":
+        break
+
+    if user_input == "7":
+        for value in release_types.values():
+            value['selected'] = True
+
+    if user_input in release_types:
+        release_types[user_input]['selected'] = not release_types[user_input]['selected']
+
+    selected_types = [value['name'].lower().replace(' ', '') if value['name'].lower() != 'compilation' else 'comp' for value in release_types.values() if value['selected']]
+    
+
+    print("")
+
+    print("\033[96mSelected types:", selected_types, "\033[0m")
+
+    print("")
+
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
+# select date
+
+start_decade = ""    
+end_decade = ""
+
+    
+print("[1] All-time (charts from all time)")
+print("[2] Specific year or decade (for example '1984', '2010s')")
+print("[3] Year-range (for example '1984-2016')")
+
+print("")
+
+time_option = input("Select a time option by entering the corresponding number: ").strip()
+
+print("")
+
+if time_option == "1":
+
+    print("Selected time option: All-time")
+    time_release = "All-time"
+
+elif time_option == "2":
+ 
+    time_input = input("Enter a specific year or decade: ").strip()
+    time_release = "Year or Decade"
+
+    print("")
+
+    if re.match(r"^\d{4}$", time_input):
+        # Single year
+        print("Selected time option: Specific year")
+        print("")
+        print("Year:", time_input)
+
+    elif re.match(r"^\d{4}s$", time_input):
+        # Decade
+        print("Selected time option: Specific decade")
+        print("")
+        print("Decade:", time_input)
+
+    else:
+        print("Invalid input. Defaulting to All-time.")
+        print("")
+        time_option = "1"
+
+else:
+
+    # Year-range option
+
+    time_input = input("Enter a year range (e.g., '1984-2016'): ").strip()
+    time_release = "Year range"
+
+    print("")
+    
+    if re.match(r"^\d{4}-\d{4}$", time_input):
+
+        # Valid year range
+
+        start_year, end_year = time_input.split("-")
+
+        print("Selected time option: Year-range")
+        print("")
+        print("Start Year:", start_year)
+        print("End Year:", end_year)
+
+    elif re.match(r"^\d{4}s-\d{4}$", time_input):
+
+        # Valid decade range
+        start_decade, end_year = time_input.split("-")
+        start_year = start_decade[:-1] + "0s"
+        print("Selected time option: Decade-range")
+        print("")
+        print("Start Decade:", start_decade)
+        print("End Year:", end_year)
+
+    elif re.match(r"^\d{4}-\d{4}s$", time_input):
+        
+        # Valid decade range
+        start_year, end_decade = time_input.split("-")
+        start_year = end_decade[:-1] + "0s"
+        print("Selected time option: Decade-range")
+        print("")
+        print("Start Year:", start_year)
+        print("End Decade:", end_decade)
+
+    elif re.match(r"^\d{4}s-\d{4}s$", time_input):
+        # Valid decade range
+        start_decade, end_decade = time_input.split("-")
+        start_year = start_decade[:-1] + "0s"
+        end_year = end_decade[:-1] + "0s"
+        print("Selected time option: Decade-range")
+        print("")
+        print("Start Decade:", start_decade)
+        print("End Decade:", end_decade)
+
+    else:
+        print("Invalid input. Defaulting to All-time.")
+        time_option = "1"
+
+print("")
+
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
+# select number of releases
+
+number_releases = input("Enter the number of releases to be \033[33mcollected\033[0m: ").strip()
+
+print("")
+
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
 
 # set up the driver
 driver = webdriver.Chrome()
@@ -30,12 +227,22 @@ wait.until(EC.presence_of_element_located((By.CLASS_NAME, "ad-close-button")))
 close_button = driver.find_element(By.CLASS_NAME, "ad-close-button")
 close_button.click()
 
+# wait for the element to appear and then remove it
+def remove_element(driver):
+    element = driver.find_element(By.CLASS_NAME, 'connatix_video')
+    driver.execute_script("""
+    var element = arguments[0];
+    element.parentNode.removeChild(element);
+    """, element)
+    return True
+
+wait.until(remove_element)
 
 wait.until(EC.presence_of_element_located((By.CLASS_NAME, "page_charts_settings_summary")))
-           
-# select the rating
-# make it user-defined
-rating = "Popular"
+
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
+# RATING
 
 rating_div = driver.find_element(By.XPATH, "//div[@onclick='RYMchart.openChartTypeSelect();']")
 rating_div.click()
@@ -48,7 +255,9 @@ time.sleep(2)
 # for url
 rating_url = rating.lower()
 
-# select the type
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
+# TYPE
 
 types = []
 
@@ -68,9 +277,10 @@ def select_release_type(release_type):
 
 
 # select releases
-select_release_type("album")
-select_release_type("ep")
-select_release_type("mixtape")
+
+for release_type in selected_types:
+    select_release_type(release_type)
+
 
 # Click on the close button
 close_button = driver.find_element(By.XPATH, "//a[@onclick='RYMchart.closeObjectTypeSelect();']")
@@ -79,27 +289,11 @@ close_button.click()
 # for url
 types = ",".join(s.lower() for s in types)
 
-# main_releases_div = driver.find_element(By.XPATH, "//a[@onclick='RYMchart.selectReleaseTypeMain();']")
-# main_releases_div.click()
-# types.append("Main")
-
-# select_release_type("album")
-# select_release_type("ep")
-# select_release_type("mixtape")
-# select_release_type("djmix")
-# select_release_type("single")
-# select_release_type("comp")
-
-# if "Main" in types:
-#     selected_types = "Main"
-# else:
-#     selected_types = ", ".join(types)
-
 time.sleep(2)
 
-# select year
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
 
-time_release = "Year range"
+# DATE
 
 current_year = datetime.datetime.now().year
 
@@ -113,22 +307,38 @@ option.click()
 
 if time_release == "Year or Decade":
 
-        # select the specific year or decade
+        date_url = time_input
 
-        specific_year = "1964"
+        if time_input or int(time_input[:-1]) < 1950:
 
-        date_url = specific_year
+            date_year_chooser_toggle = driver.find_element(By.CLASS_NAME, "date_year_chooser_toggle")
+            date_year_chooser_toggle.click()
 
-        if specific_year.endswith("s"):
+            time.sleep(2)
 
-            specific_decade = specific_year[:-1]
-            decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{specific_decade}")
-            decade_row.click()
+            if time_input.endswith("s"):
+
+                specific_decade = time_input[:-1]
+                decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{specific_decade}")
+                decade_row.click()
+
+            else:
+
+                specific_year_cell = driver.find_element(By.ID, f"date_year_chooser_year_{time_input}")
+                specific_year_cell.click()
 
         else:
+            
+            if time_input.endswith("s"):
 
-            specific_year_cell = driver.find_element(By.ID, f"date_year_chooser_year_{specific_year}")
-            specific_year_cell.click()
+                specific_decade = time_input[:-1]
+                decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{specific_decade}")
+                decade_row.click()
+
+            else:
+
+                specific_year_cell = driver.find_element(By.ID, f"date_year_chooser_year_{time_input}")
+                specific_year_cell.click()
             
         # Click on the empty space
         div_close = driver.find_element(By.ID, "overlay_invisible")
@@ -138,39 +348,51 @@ if time_release == "Year or Decade":
 elif time_release == "Year range":
         
         # select the year range
-        
-        start_year = "2024"
-        end_year = "2000s"
 
         start_url = start_year
         end_url = end_year
 
         # start year
-        if start_year.endswith("s"):
 
-            start_decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{start_year[:-1]}")
+        if start_year or int(start_decade[:-1]) < 1950:
+
+            date_year_chooser_toggle = driver.find_element(By.CLASS_NAME, "date_year_chooser_toggle")
+            date_year_chooser_toggle.click()
+
+            time.sleep(2)
+
+        if start_decade.endswith("s"):
+
+            start_decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{start_decade[:-1]}")
             start_decade_row.click()
 
-            start_url = start_year[:-1]
+            start_url = start_decade[:-1]
 
         else:
-
             start_year = driver.find_element(By.ID, f"date_year_chooser_year_{start_year}")
             start_year.click()
 
-    
         # end year
-        if end_year.endswith("s"):
+                
+        if end_year or int(end_decade[:-1]) < 1950:
 
-            end_decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{end_year[:-1]}")
+            date_year_chooser_toggle = driver.find_element(By.CLASS_NAME, "date_year_chooser_toggle")
+            date_year_chooser_toggle.click()
+
+            time.sleep(2)
+
+        if end_decade.endswith("s"):
+
+            end_decade_row = driver.find_element(By.ID, f"date_year_chooser_decade_{end_decade[:-1]}")
             end_decade_row.click()
-
-            end_url = end_year[:-1]
+            
+            end_url = end_decade[:-1]
 
         else:
 
             end_year = driver.find_element(By.ID, f"date_year_chooser_year_{end_year}")
             end_year.click()
+
 
 
         date_url = f"{start_url}-{end_url}"
@@ -196,6 +418,8 @@ else:
 
 time.sleep(2)
 
+# ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
+
 # update chart
 
 update_button = driver.find_element(By.XPATH, "//a[@onclick='RYMchart.onClickCreateChart();']")
@@ -206,11 +430,13 @@ time.sleep(5)
 # soup is tasty, but not as tasty as soup.find_all()
 # soup did not work
 
-# number of pages 
+# RELEASES
+
+
 
 releases_collected = 0
 
-number_releases = 80
+number_releases = int(number_releases)
 
 num_pages = math.ceil(number_releases / 40.0)
 
@@ -296,7 +522,9 @@ driver.quit()
 df = pd.DataFrame(data)
 
 # save the data
-df.to_csv(f"list ranked by {rating_url} rating.csv", index=False)
+df.to_csv(f"list ranked by {rating_url} rating {date_url}.csv", index=False)
+
+print("👈 here is your clean file. enjoy.")
 
 
 
