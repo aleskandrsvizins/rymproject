@@ -228,15 +228,15 @@ close_button = driver.find_element(By.CLASS_NAME, "ad-close-button")
 close_button.click()
 
 # wait for the element to appear and then remove it
-def remove_element(driver):
-    element = driver.find_element(By.CLASS_NAME, 'connatix_video')
-    driver.execute_script("""
-    var element = arguments[0];
-    element.parentNode.removeChild(element);
-    """, element)
-    return True
+# def remove_element(driver):
+#    element = driver.find_element(By.CLASS_NAME, 'connatix_video')
+#    driver.execute_script("""
+#    var element = arguments[0];
+#    element.parentNode.removeChild(element);
+#    """, element)
+#    return True
 
-wait.until(remove_element)
+# wait.until(remove_element)
 
 wait.until(EC.presence_of_element_located((By.CLASS_NAME, "page_charts_settings_summary")))
 
