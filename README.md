@@ -28,7 +28,7 @@ Programma tika izstrādā izmantojot Visual Studio Code.
     - Instalējiet vajadzīgās Python pakotnes, izmantojot šo komandu:
         
 ```bash
-pip install selenium pandas math time datetime random re
+pip install selenium pandas python-math time datetime random re
 ```
 
 - **Selenium:** Izmanto tiešsaistes tīmekļa lietojumprogrammu (web application) testēšanai un automatizācijai. Ārkārtīgi noderīga, ja ir nepieciešams veikt darbības tiešsaistes vietnēs vai iegūt datus no tīmekļa lapām.
