@@ -2,7 +2,7 @@
 
 ## Projekta Pārskats
 
-Šis Python skripts plaši izmanto Selenium bibliotēku, lai iegūtu datus no [rateyourmusic.com](https://rateyourmusic.com) chartiem. Skripts ļauj lietotājiem pielāgot datu vākšanas procesu, pamatojoties uz dažādiem parametriem, piemēram, vērtējuma veidu, relīzu veidiem, laika diapazonu un apkopojamo izlaidumu skaitu. 
+Šis Python skripts plaši izmanto Selenium bibliotēku, lai iegūtu datus no [rateyourmusic.com](https://rateyourmusic.com) čartiem. Skripts ļauj lietotājiem pielāgot datu vākšanas procesu, pamatojoties uz dažādiem parametriem, piemēram, vērtējuma veidu, relīzu veidiem, laika diapazonu un apkopojamo izlaidumu skaitu. 
 
 Programma tika izstrādā izmantojot Visual Studio Code.
 
@@ -10,7 +10,7 @@ Programma tika izstrādā izmantojot Visual Studio Code.
 
 Šī projekta galvenie mērķi ir:
 
-1. **Datu vākšana:** izgūstiet informāciju par mūzikas izlaidumiem no RateYourMusic chartiem, pamatojoties uz lietotāja definētiem kritērijiem.
+1. **Datu vākšana:** izgūstiet informāciju par mūzikas izlaidumiem no RateYourMusic čartiem, pamatojoties uz lietotāja definētiem kritērijiem.
 2. **Lietotāja pielāgošana:** ļauj lietotājiem pielāgot datu vākšanas procesu, atlasot vērtējuma veidus, relīzu veidus, laika diapazonu un apkopojamo relīzu skaitu.
 3. **Datu eksportēšana:** saglabājiet apkopotos datus tīrā un sakārtotā CSV failā turpmākai analīzei.
 
