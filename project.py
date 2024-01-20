@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
@@ -208,7 +209,12 @@ print("")
 # ══════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹════════════⊹⊱≼≽⊰⊹══════
 
 # set up the driver
-driver = webdriver.Chrome()
+service = Service()
+option = webdriver.ChromeOptions()
+# ssl error handler
+option.add_experimental_option('excludeSwitches', ['enable-logging'])
+driver = webdriver.Chrome(service=service, options=option)
+
 driver.get("https://rateyourmusic.com/charts/")
 
 # wait for the page to load
